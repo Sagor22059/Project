@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Page Replacement Algorithms</title>
+  <link rel="stylesheet" href="paging.css" />
+</head>
+<body>
+<div class="container">
+  <h1>Page Replacement Algorithms</h1>
+  <p>Enter the page sequence, number of frames, and select an algorithm to calculate page faults.</p>
+
+  <div class="form-group">
+    <label for="pages">Page Sequence (comma-separated):</label>
+    <input type="text" id="pages" placeholder="e.g., 7, 0, 1, 2, 0, 3, 0, 4" />
+
+    <label for="frames">Number of Frames:</label>
+    <input type="number" id="frames" placeholder="e.g., 3" />
+
+    <label for="algorithm">Select Algorithm:</label>
+    <select id="algorithm">
+      <option value="fifo">FIFO</option>
+      <option value="lru">LRU</option>
+      <option value="optimal">Optimal</option>
+    </select>
+
+    <button onclick="runAlgorithm()">Calculate</button>
+  </div>
+
+  <div id="results">
+    <h2>Results</h2>
+    <div id="output" class="result-box"></div>
+  </div>
+</div>
+
+<script>
+  function runAlgorithm() {
+    const pages = document.getElementById('pages').value.split(',').map(x => parseInt(x.trim()));
+    const frameCount = parseInt(document.getElementById('frames').value);
+    const algorithm = document.getElementById('algorithm').value;
+
+    if (!pages.length || isNaN(frameCount) || frameCount <= 0) {
+      alert('Please enter valid inputs!');
+      return;
+    }
+
+    let result = '';
+
+    switch (algorithm) {
+      case 'fifo':
+        result = fifo(pages, frameCount);
+        break;
+      case 'lru':
+        result = lru(pages, frameCount);
+        break;
+      case 'optimal':
+        result = optimal(pages, frameCount);
+        break;
+      default:
+        result = 'Invalid Algorithm Selected';
+    }
+
+    document.getElementById('output').innerHTML = result;
+  }
+
+  function generateTable(frameStates, pageFaults, title) {
+    let table = `<h3>${title}</h3><table><thead><tr><th>Step</th><th>Page</th>`;
+    for (let i = 0; i < frameStates[0].frames.length; i++) {
+      table += `<th>Frame ${i + 1}</th>`;
+    }
+    table += `<th>Page Fault</th></tr></thead><tbody>`;
+
+    frameStates.forEach((step, index) => {
+      table += `<tr><td>${index + 1}</td><td>${step.page}</td>`;
+      step.frames.forEach(f => {
+        table += `<td>${f !== undefined ? f : ''}</td>`;
+      });
+      table += `<td>${step.fault ? 'Yes' : 'No'}</td></tr>`;
+    });
+
+    table += `</tbody></table><p><strong>Total Page Faults: ${pageFaults}</strong></p>`;
+    return table;
+  }
+
+  function fifo(pages, frames) {
+    const queue = [];
+    const steps = [];
+    let pageFaults = 0;
+
+    pages.forEach(page => {
+      let fault = false;
+      if (!queue.includes(page)) {
+        if (queue.length === frames) queue.shift();
+        queue.push(page);
+        pageFaults++;
+        fault = true;
+      }
+      steps.push({ page, frames: [...queue, ...Array(frames - queue.length)], fault });
+    });
+
+    return generateTable(steps, pageFaults, 'FIFO Algorithm');
+  }
+
+  function lru(pages, frames) {
+    const stack = [];
+    const steps = [];
+    let pageFaults = 0;
+
+    pages.forEach(page => {
+      const index = stack.indexOf(page);
+      let fault = false;
+
+      if (index !== -1) {
+        stack.splice(index, 1);
+      }
+      stack.push(page);
+
+      if (stack.length > frames) stack.shift();
+
+      if (index === -1) {
+        pageFaults++;
+        fault = true;
+      }
+
+      steps.push({ page, frames: [...stack, ...Array(frames - stack.length)], fault });
+    });
+
+    return generateTable(steps, pageFaults, 'LRU Algorithm');
+  }
+
+  function optimal(pages, frames) {
+    const memory = [];
+    const steps = [];
+    let pageFaults = 0;
+
+    pages.forEach((page, i) => {
+      let fault = false;
+      if (!memory.includes(page)) {
+        if (memory.length < frames) {
+          memory.push(page);
+        } else {
+          let farthest = -1;
+          let replaceIndex = 0;
+
+          memory.forEach((m, idx) => {
+            const nextUse = pages.slice(i + 1).indexOf(m);
+            if (nextUse === -1 || nextUse > farthest) {
+              farthest = nextUse;
+              replaceIndex = idx;
+            }
+          });
+
+          memory[replaceIndex] = page;
+        }
+        pageFaults++;
+        fault = true;
+      }
+
+      steps.push({ page, frames: [...memory, ...Array(frames - memory.length)], fault });
+    });
+
+    return generateTable(steps, pageFaults, 'Optimal Algorithm');
+  }
+</script>
+</body>
+</html>

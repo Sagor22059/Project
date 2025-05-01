@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disk Scheduling Algorithm</title>
+    <link rel="stylesheet" href="disk.css">
+</head>
+<body>
+
+<header>
+    <h1>Disk Scheduling Algorithm </h1>
+    <p> FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK algorithms.</p>
+</header>
+
+<section class="content">
+    <h2>Enter Disk Data</h2>
+
+    <div class="inputs">
+        <!-- Dropdown for Selecting Algorithm -->
+        <div class="input-group">
+            <label for="algorithm">Choose Algorithm:</label>
+            <select id="algorithm">
+                <option value="fcfs">FCFS (First-Come-First-Serve)</option>
+                <option value="sstf">SSTF (Shortest Seek Time First)</option>
+                <option value="scan">SCAN</option>
+                <option value="cscan">C-SCAN</option>
+                <option value="look">LOOK</option>
+                <option value="clook">C-LOOK</option>
+            </select>
+        </div>
+
+        <!-- Input for Disk Queue -->
+        <div class="input-group">
+            <label for="disk-queue">Disk Queue (separate by space):</label>
+            <input type="text" id="disk-queue" placeholder="Example: 98 183 37 122 14 124 65 67">
+        </div>
+
+        <!-- Input for Initial Head Position -->
+        <div class="input-group">
+            <label for="initial-head">Initial Head Position:</label>
+            <input type="number" id="initial-head" placeholder="Example: 53">
+        </div>
+
+        <!-- Input for Disk Size -->
+        <div class="input-group">
+            <label for="disk-size">Disk Size (Optional for SCAN & C-SCAN):</label>
+            <input type="number" id="disk-size" placeholder="Example: 200">
+        </div>
+
+        <!-- Button to Run Disk Scheduling -->
+        <div class="input-group">
+            <button onclick="runDiskScheduling()">Run Disk Scheduling</button>
+        </div>
+    </div>
+
+    <!-- Output Section -->
+    <div class="output" id="output"></div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Disk Scheduling Simulator. All Rights Reserved.</p>
+</footer>
+
+<script src="disk-scheduling.js"></script>
+</body>
+</html>

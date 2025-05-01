@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Allocation Algorithms</title>
+    <link rel="stylesheet" href="memory.css">
+</head>
+<body>
+<div class="container">
+    <h1>Memory Allocation Calculator</h1>
+    <p>Enter memory block sizes, process sizes, and select an allocation algorithm.</p>
+
+    <div>
+        <label for="blocks">Memory Block Sizes (comma-separated):</label>
+        <input type="text" id="blocks" placeholder="e.g., 100, 500, 200, 300, 600">
+
+        <label for="processes">Process Sizes (comma-separated):</label>
+        <input type="text" id="processes" placeholder="e.g., 212, 417, 112, 426">
+
+        <label for="algorithm">Select Allocation Algorithm:</label>
+        <select id="algorithm">
+            <option value="first-fit">First-Fit</option>
+            <option value="best-fit">Best-Fit</option>
+            <option value="worst-fit">Worst-Fit</option>
+        </select>
+
+        <button onclick="calculateAllocation()">Allocate</button>
+    </div>
+
+    <div id="results">
+        <h2>Results</h2>
+        <div id="output" class="result-box"></div>
+    </div>
+</div>
+
+<script>
+    function calculateAllocation() {
+        const blocks = document.getElementById('blocks').value.split(',').map(Number);
+        const processes = document.getElementById('processes').value.split(',').map(Number);
+        const algorithm = document.getElementById('algorithm').value;
+
+        if (!blocks.length || !processes.length) {
+            alert('Please enter valid block and process sizes!');
+            return;
+        }
+
+        let result;
+
+        switch (algorithm) {
+            case 'first-fit':
+                result = firstFit(blocks, processes);
+                break;
+            case 'best-fit':
+                result = bestFit(blocks, processes);
+                break;
+            case 'worst-fit':
+                result = worstFit(blocks, processes);
+                break;
+            default:
+                result = 'Invalid Algorithm Selected';
+        }
+
+        document.getElementById('output').innerHTML = result;
+    }
+
+    function firstFit(blocks, processes) {
+        const allocation = new Array(processes.length).fill(-1);
+
+        for (let i = 0; i < processes.length; i++) {
+            for (let j = 0; j < blocks.length; j++) {
+                if (blocks[j] >= processes[i]) {
+                    allocation[i] = j;
+                    blocks[j] -= processes[i];
+                    break;
+                }
+            }
+        }
+
+        return formatResult(allocation, processes);
+    }
+
+    function bestFit(blocks, processes) {
+        const allocation = new Array(processes.length).fill(-1);
+
+        for (let i = 0; i < processes.length; i++) {
+            let bestIdx = -1;
+            for (let j = 0; j < blocks.length; j++) {
+                if (blocks[j] >= processes[i]) {
+                    if (bestIdx === -1 || blocks[j] < blocks[bestIdx]) {
+                        bestIdx = j;
+                    }
+                }
+            }
+
+            if (bestIdx !== -1) {
+                allocation[i] = bestIdx;
+                blocks[bestIdx] -= processes[i];
+            }
+        }
+
+        return formatResult(allocation, processes);
+    }
+
+    function worstFit(blocks, processes) {
+        const allocation = new Array(processes.length).fill(-1);
+
+        for (let i = 0; i < processes.length; i++) {
+            let worstIdx = -1;
+            for (let j = 0; j < blocks.length; j++) {
+                if (blocks[j] >= processes[i]) {
+                    if (worstIdx === -1 || blocks[j] > blocks[worstIdx]) {
+                        worstIdx = j;
+                    }
+                }
+            }
+
+            if (worstIdx !== -1) {
+                allocation[i] = worstIdx;
+                blocks[worstIdx] -= processes[i];
+            }
+        }
+
+        return formatResult(allocation, processes);
+    }
+
+    function formatResult(allocation, processes) {
+        let result = `<table border="1" style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th>Process</th>
+                <th>Size</th>
+                <th>Block Allocated</th>
+            </tr>`;
+
+        for (let i = 0; i < processes.length; i++) {
+            result += `<tr>
+                <td>P${i + 1}</td>
+                <td>${processes[i]}</td>
+                <td>${allocation[i] !== -1 ? allocation[i] + 1 : 'Not Allocated'}</td>
+            </tr>`;
+        }
+
+        result += `</table>`;
+        return result;
+    }
+</script>
+</body>
+</html>

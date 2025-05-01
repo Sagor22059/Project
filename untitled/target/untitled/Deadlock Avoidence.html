@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banker's Algorithm Simulator</title>
+    <link rel="stylesheet" href="deadlock.css">
+</head>
+<body>
+
+<header>
+    <h1>Banker's Algorithm</h1>
+    <p>Simulate deadlock avoidance using Banker's Algorithm</p>
+</header>
+
+<section class="content">
+    <h2>Enter Resources and Process Info</h2>
+
+    <div class="inputs">
+        <label for="resources">Total Resources (space-separated):</label>
+        <input type="text" id="resources" placeholder="Example: 10 5 7">
+
+        <label for="allocated">Allocated Resources (comma-separated per process):</label>
+        <input type="text" id="allocated" placeholder="Example: 0 1 0, 2 0 0">
+
+        <label for="maximum">Maximum Resources (comma-separated per process):</label>
+        <input type="text" id="maximum" placeholder="Example: 7 5 3, 3 2 2">
+
+        <button onclick="runBankersAlgorithm()">Run Algorithm</button>
+    </div>
+
+    <div class="output" id="output"></div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Banker's Algorithm Simulator</p>
+</footer>
+
+<script src="bankers.js"></script>
+</body>
+</html>

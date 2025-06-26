@@ -19,15 +19,14 @@ public class ConsoleInput {
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter ID: ");
-                    int id = scanner.nextInt();
-                    scanner.nextLine();
-
                     System.out.print("Enter Name: ");
                     String name = scanner.nextLine();
 
-                    serviceClass.insertWithID(id, name);
-                    System.out.println("Student inserted successfully.");
+                    if (serviceClass.InsetDB(name)) {
+                        System.out.println("Student inserted successfully.");
+                    } else {
+                        System.out.println("Failed to insert student.");
+                    }
                     break;
 
                 case 2:

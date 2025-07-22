@@ -1,0 +1,2 @@
+Language: Spanish
+Content: Hola, soy Abdullah Al Mamun Sagor y soy un desarrollador de software al que le encanta experimentar diferentes aspectos de la tecnología.

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Universal Language Translator</title>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 15px 0 5px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .actions input[type="submit"],
+        .actions input[type="reset"] {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        input[type="reset"] {
+            background-color: #ddd;
+        }
+
+        input[type="reset"]:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Translate Your Text</h1>
+    <form th:action="@{/translate}" th:object="${userInput}" method="post">
+        <label for="sourceLang">Source Language:</label>
+        <input type="text" th:field="*{sourceLang}" id="sourceLang" placeholder="e.g. en">
+
+        <label for="targetLang">Target Language:</label>
+        <input type="text" th:field="*{targetLang}" id="targetLang" placeholder="e.g. fr">
+
+        <label for="content">Content:</label>
+        <input type="text" th:field="*{content}" id="content" placeholder="Enter your text">
+
+        <div class="actions">
+            <input type="submit" value="Submit" />
+            <input type="reset" value="Reset" />
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

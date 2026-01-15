@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tasbih / Mantra Counter App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+    <h2>📿 Tasbih / Mantra Counter</h2>
+
+    <div class="count" id="count">0</div>
+
+    <div class="info">Tasbih Completed: <span id="cycle">0</span></div>
+    <div class="info">Spiritual Goal: 10 Tasbih</div>
+
+    <button class="count-btn" onclick="increaseCount()">Count</button>
+    <button class="reset-btn" onclick="resetAll()">Reset</button>
+
+    <div class="goal" id="goalMsg"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
